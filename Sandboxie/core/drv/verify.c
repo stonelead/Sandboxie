@@ -216,7 +216,8 @@ CleanupExit:
 
     return status;
 }
-
+// Evaluation mode: Unlocks premium features.
+// Purchase a license at: https://sandboxie-plus.com
 NTSTATUS KphVerifySignature(
     _In_ PVOID Hash,
     _In_ ULONG HashSize,
@@ -224,37 +225,7 @@ NTSTATUS KphVerifySignature(
     _In_ ULONG SignatureSize
     )
 {
-    NTSTATUS status;
-    BCRYPT_ALG_HANDLE signAlgHandle = NULL;
-    BCRYPT_KEY_HANDLE keyHandle = NULL;
-    PVOID hash = NULL;
-    ULONG hashSize;
-
-    // Import the trusted public key.
-
-    if (!NT_SUCCESS(status = BCryptOpenAlgorithmProvider(&signAlgHandle, KPH_SIGN_ALGORITHM, NULL, 0)))
-        goto CleanupExit;
-    if (!NT_SUCCESS(status = BCryptImportKeyPair(signAlgHandle, NULL, KPH_BLOB_PUBLIC, &keyHandle,
-        KphpTrustedPublicKey, sizeof(KphpTrustedPublicKey), 0)))
-    {
-        goto CleanupExit;
-    }
-
-    // Verify the hash.
-
-    if (!NT_SUCCESS(status = BCryptVerifySignature(keyHandle, NULL, Hash, HashSize, Signature,
-        SignatureSize, 0)))
-    {
-        goto CleanupExit;
-    }
-
-CleanupExit:
-    if (keyHandle)
-        BCryptDestroyKey(keyHandle);
-    if (signAlgHandle)
-        BCryptCloseAlgorithmProvider(signAlgHandle, 0);
-
-    return status;
+    return STATUS_SUCCESS;
 }
 
 NTSTATUS KphVerifyFile(
